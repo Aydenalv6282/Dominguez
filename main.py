@@ -141,7 +141,7 @@ print("Estimated Standard Deviation: ", numpy.std(defined_dist))
 plt.show()
 '''
 
-'''# Poisson Bus
+'''# POISSSON BUS
 rate = 5
 x_values = []
 num_people = []
