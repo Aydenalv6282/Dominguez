@@ -4,7 +4,7 @@ import math
 import time
 from matplotlib import pyplot as plt
 
-loops = 24
+loops = 100000
 
 ''' #11% AND 9%
 result = None
@@ -147,7 +147,7 @@ x_values = []
 num_people = []
 for x in range(loops):
     x_values.append(x)
-    gen = numpy.random.poisson(5)  # Given a mean, it uses poisson distribution to generate a random number.
+    gen = numpy.random.poisson(rate)  # Given a mean, it uses poisson distribution to generate a random number.
     people = 0
     for b in range(gen):
         carry = random.randint(20, 40)
@@ -161,4 +161,18 @@ for b in range(1, len(num_people)):
 
 plt.plot(x_values, sum_people, color="blue")
 plt.show()
+'''
+'''# Casualty Insurance
+rate = 800
+greater_count = 0
+cnt = 0
+for i in range(loops):
+    sum = 0
+    for x in range(1000):
+        ran = random.random()
+        if ran < 0.05:
+            sum += numpy.random.exponential(rate)
+    if sum > 50000:
+        greater_count += 1
+print(str((greater_count/loops)*100)+"%")
 '''
