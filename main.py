@@ -4,7 +4,7 @@ import math
 import time
 from matplotlib import pyplot as plt
 
-loops = 100000
+loops = 1000000
 
 ''' #11% AND 9%
 result = None
@@ -175,4 +175,16 @@ for i in range(loops):
     if sum > 50000:
         greater_count += 1
 print(str((greater_count/loops)*100)+"%")
+'''
+'''# Random Walk Problem
+ins = 0
+for n in range(loops):
+    xran = (random.random()-.5)*2
+    yran = (random.random()-.5)*2
+    zran = (random.random()-.5)*2
+    dist = math.sqrt(xran**2+yran**2+zran**2)
+    if dist <= 1:
+        ins += 1
+per = ins/loops
+print(per*8)
 '''
