@@ -176,7 +176,7 @@ for i in range(loops):
         greater_count += 1
 print(str((greater_count/loops)*100)+"%")
 '''
-'''# Random Walk Problem
+'''# Sphere Problem
 ins = 0
 for n in range(loops):
     xran = (random.random()-.5)*2
