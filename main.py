@@ -4,7 +4,7 @@ import math
 import time
 from matplotlib import pyplot as plt
 
-loops = 1000000
+loops = 10000
 
 ''' #11% AND 9%
 result = None
@@ -187,4 +187,24 @@ for n in range(loops):
         ins += 1
 per = ins/loops
 print(per*8)
+'''
+'''# RANDOM WALK PROBLEM
+totdist = 0
+absdist = 0
+loops = 100000
+x_vals = []
+y_vals = []
+for s in range(loops):
+    x_vals.append(s)
+    dist = 0
+    for d in range(100):
+        dist += random.choice([-1, 1])
+    adist = abs(dist)
+    y_vals.append(dist)
+    totdist += dist
+    absdist += adist
+print("Average distance, positive/negative:", totdist/loops)
+print("Average absolute distance:", absdist/loops)
+plt.scatter(x_vals, y_vals, color="blue", s=1)
+plt.show()
 '''
