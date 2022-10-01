@@ -208,12 +208,11 @@ print("Average absolute distance:", absdist/loops)
 plt.scatter(x_vals, y_vals, color="blue", s=1)
 plt.show()
 '''
-# Single Server Queuing model
-T = 9  # Does this represent the maximum time that the server lets new customers in? Does this mean that customers
-# cannot arrive after 9 units of time even though the mean time of arrival is 10 units? Won't customers not make it
-# most of the time? This is assumed.
+# Sequential Server Queuing model
+T = 9*60  # Max Arrival Time
 E = 20  # Server usage time calculation
 P = 10  # Customer arrival time calculation
+servers = int(input("How many servers will the sequential server queuing model have? "))
 total_time = 0
 total_service_time = 0
 total_idle_time = 0
@@ -230,26 +229,31 @@ for l in range(loops):
     queue = 0
     customer_arrivals = [0]  # List of ARRIVAL times, not including usage.
     customer_use_times = []
+    customer_begin_times = []
     interval = 0
     while arrival_time <= T:  # Calculates when all customers initially arrive
         interval = numpy.random.poisson(P)
+        if arrival_time == 0 and interval <= T:
+            idle_time += interval
         arrival_time += interval  # Time DOES NOT include the usage time yet.
         if arrival_time <= T:
             customer_arrivals.append(arrival_time)
-            if queue == 0:
-                idle_time += interval
             queue += 1
-        elif queue == 0:
-            idle_time = T
     customer_arrivals.pop(0)
-    for q in range(queue):  # Adds usage time to initial calculations
-        usage = numpy.random.exponential(E)
-        service_time += usage
-        customer_use_times.append(service_time)
-        if q != queue - 1:
-            diff = customer_arrivals[q + 1] - (customer_arrivals[q] + usage)
-            if diff > 0:  # Determines if usage time overlaps with idle time
-                idle_time += diff
+    for s in range(servers):
+        for q in range(queue):  # Adds usage time to initial calculations
+            usage = numpy.random.exponential(E)
+            service_time += usage
+            customer_use_times.append(usage)
+            if q == 0:
+                customer_begin_times.append(customer_arrivals[0])
+            else:
+                pbt = customer_begin_times[q-1] + usage
+                if pbt > customer_arrivals[q]:
+                    customer_begin_times.append(pbt)
+                else:
+                    customer_begin_times.append(customer_arrivals[q])
+                    idle_time += customer_arrivals[q] - pbt
     time = service_time + idle_time
     over_time = time - T
     if PRINT_RAW_DATA:
@@ -261,14 +265,13 @@ for l in range(loops):
     total_idle_time += idle_time
     total_over_time += over_time
     total_customer_count += queue
-if PRINT_RAW_DATA:
-    print("==========\n"
-          "Average data over", loops, "runs:", "\n\nTotal Customers:", total_customer_count, "\nAverage Customers:",
-          total_customer_count/loops, "\nTotal Service Time:", total_service_time, "\nAverage Service Time:",
-          total_service_time/loops, "\nTotal Idle Time:", total_idle_time, "\nAverage Idle Time:",
-          total_idle_time/loops, "\nTotal Over Time:", total_over_time, "\nAverage Over Time:",
-          total_over_time/loops, "\nTotal Server Time:", total_time, "\nAverage Server Time:", total_time/loops,
-          "\n==========")
+print("==========\n"
+    "Average data over", loops, "runs:", "\n\nTotal Customers:", total_customer_count, "\nAverage Customers:",
+    total_customer_count/loops, "\nTotal Service Time:", total_service_time, "\nAverage Service Time:",
+    total_service_time/loops, "\nTotal Idle Time:", total_idle_time, "\nAverage Idle Time:",
+    total_idle_time/loops, "\nTotal Over Time:", total_over_time, "\nAverage Over Time:",
+    total_over_time/loops, "\nTotal Server Time:", total_time, "\nAverage Server Time:", total_time/loops,
+    "\n==========")
 '''
 Answer For #2:
 If you wanted information for the amount of idle time the server experiences in a day, you'd need to specify a unit of
